@@ -5,6 +5,15 @@ import styled from 'styled-components';
 import Header from './Header';
 import BloomHeader from './BloomHeader';
 import Login from './Login';
+import View from './View';
+
+const PrivateRoute = ({component: Component, ...rest}) => 
+  <Route {...rest} render={
+    props => localStorage.getItem('token') ? (
+      <Component {...props} />
+    ):(
+      <Redirect to='/login' />
+  )} />
 
 const App = () => {
   return (
@@ -14,7 +23,11 @@ const App = () => {
       <RouteContainer>
         <Route exact path="/">
           <Login/>
-        </Route>          
+        </Route>
+        <Route path="/login">
+          <Login/>
+        </Route>
+        <PrivateRoute path={'/view'} component={View} />         
       </RouteContainer>
     </AppContainer>
   )

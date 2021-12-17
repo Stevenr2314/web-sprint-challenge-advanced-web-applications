@@ -1,12 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+
 
 const Login = () => {
+    const [form , setForm] = useState({username: '', password: ''})
+    const history = useHistory()
+    const handleChange = e => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        axios.post('http://localhost:5000/api/login', form)
+            .then(resp => {
+                localStorage.setItem('token', resp.data.token)
+                history.push('/view')
+            })
+            .catch(err => console.log(err.respone.data))
+    }
     
     return(<ComponentContainer>
         <ModalContainer>
             <h1>Welcome to Blogger Pro</h1>
             <h2>Please enter your account information.</h2>
+            <FormGroup onSubmit={handleSubmit}>
+                <Label htmlFor='username'>Username:
+                    <Input name='username' id='username' value={form.username} onChange={handleChange}/>
+                </Label>
+                <br />
+                <Label htmlFor='password'>Password:
+                    <Input type='password' name='password' id='password' value={form.password} onChange={handleChange}/>
+                </Label>
+                <button type='submit'>Login</button>
+            </FormGroup>
         </ModalContainer>
     </ComponentContainer>);
 }
@@ -46,12 +77,13 @@ const FormGroup = styled.form`
 `
 
 const Input = styled.input`
-    font-size: 1rem;
-    padding: 1rem 0;
+    font-size: 1.4rem;
+    padding: 1rem 0 1rem 1rem;
     width:100%;
 `
 
 const Button = styled.button`
+    font-size: 1.3rem;
     padding:1rem;
     width: 100%;
 `
