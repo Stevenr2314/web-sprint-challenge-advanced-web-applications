@@ -6,14 +6,8 @@ import Header from './Header';
 import BloomHeader from './BloomHeader';
 import Login from './Login';
 import View from './View';
-
-const PrivateRoute = ({component: Component, ...rest}) => 
-  <Route {...rest} render={
-    props => localStorage.getItem('token') ? (
-      <Component {...props} />
-    ):(
-      <Redirect to='/login' />
-  )} />
+import PrivateRoute from './PrivateRoute';
+import Logout from './Logout';
 
 const App = () => {
   return (
@@ -27,7 +21,8 @@ const App = () => {
         <Route path="/login">
           <Login/>
         </Route>
-        <PrivateRoute path={'/view'} component={View} />         
+        <PrivateRoute path={'/view'} component={View} />
+        <PrivateRoute path={'/logout'} component={Logout} />          
       </RouteContainer>
     </AppContainer>
   )

@@ -6,7 +6,9 @@ import { useHistory } from 'react-router-dom';
 
 const Login = () => {
     const [form , setForm] = useState({username: '', password: ''})
+    const [error, setError] = useState('')
     const history = useHistory()
+
     const handleChange = e => {
         setForm({
             ...form,
@@ -19,15 +21,19 @@ const Login = () => {
         axios.post('http://localhost:5000/api/login', form)
             .then(resp => {
                 localStorage.setItem('token', resp.data.token)
+                setError('')
                 history.push('/view')
             })
-            .catch(err => console.log(err.respone.data))
+            .catch(err => setError('Username/Password combination not found'))
     }
     
     return(<ComponentContainer>
         <ModalContainer>
             <h1>Welcome to Blogger Pro</h1>
             <h2>Please enter your account information.</h2>
+            {
+                error && <Error id='error'>{error}</Error>
+            }
             <FormGroup onSubmit={handleSubmit}>
                 <Label htmlFor='username'>Username:
                     <Input name='username' id='username' value={form.username} onChange={handleChange}/>
@@ -36,7 +42,7 @@ const Login = () => {
                 <Label htmlFor='password'>Password:
                     <Input type='password' name='password' id='password' value={form.password} onChange={handleChange}/>
                 </Label>
-                <button type='submit'>Login</button>
+                <Button type='submit' id='submit'>Login</Button>
             </FormGroup>
         </ModalContainer>
     </ComponentContainer>);
@@ -86,4 +92,13 @@ const Button = styled.button`
     font-size: 1.3rem;
     padding:1rem;
     width: 100%;
+`
+
+const Error = styled.p`
+    background-color: #d16767;
+    border: 2px solid #773939;
+    border-radius: 3px;
+    padding: 1rem;
+    margin: 0;
+    font-size: 2rem;
 `
