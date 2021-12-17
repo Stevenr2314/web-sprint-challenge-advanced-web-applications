@@ -6,6 +6,13 @@ import MutationObserver from 'mutationobserver-shim';
 
 import Article from './Article';
 
+const testArticle = {
+    headline: "Biggest News Ever",
+    author: "Best Journalist",
+    summary: "The news was so big that it was huge!",
+    body: "There was this piece of news that was so incredibly gargantuan that it had to be renamed as the Biggest News Ever. The news was immense and quite interesting, so much so that this article was created!"
+}
+
 test('renders component without errors', ()=> {
 });
 
